@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e37cc2b5-0efa-4fbe-bbea-db2f5e441d09" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/et/fayda/DTO/BioMetricsDataDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/et/fayda/DTO/CaptureRequestDeviceDetailDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/et/fayda/DTO/CaptureRequestDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/et/fayda/DTO/DigitalId.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/et/fayda/DTO/NewBioAuthDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/et/fayda/FaceCapture.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/et/fayda/Main.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/et/fayda/Utils/CryptoUtility.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/et/fayda/Utils/JwtUtility.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2IzMLwcXIFxulOrntrPebwlR1lQ" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="false" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/yafetgetachew/Projects/FaceCapture/src/main/java/et/fayda",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.5275862",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/et/fayda" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="et.fayda.DTO" />
+      <recent name="et.fayda.Utils" />
+      <recent name="et.fayda.Adapters" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="et.fayda.Main" />
+      <module name="FaceCapture" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="et.fayda.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Main" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e37cc2b5-0efa-4fbe-bbea-db2f5e441d09" name="Changes" comment="" />
+      <created>1671179907416</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1671179907416</updated>
+      <workItem from="1671179908695" duration="6287000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
