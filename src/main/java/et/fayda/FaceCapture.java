@@ -1,5 +1,6 @@
 package et.fayda;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import et.fayda.DTO.BioMetricsDataDto;
 import et.fayda.DTO.CaptureRequestDeviceDetailDto;
@@ -15,31 +16,62 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class FaceCapture {
+    private static final String HASH = "hash";
     private static ObjectMapper oB = null;
 
-    public String getEncryptedFaceData(byte[] face, String transactionID){
+    public String getEncryptedFaceData(byte[] face, String transactionID) throws JsonProcessingException {
+
         BioMetricsDataDto bioDto = new BioMetricsDataDto();
 
+        bioDto.setBioValue(Base64.getUrlEncoder().encodeToString(face));
+
+        JSONArray result = null;
+
         try {
-            doAuthCapture(transactionID, bioDto).get("DATA");
+            result = doAuthCapture(transactionID, bioDto);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return null;
+        return oB.writeValueAsString(result);
     }
 
 
-    public Map<String, Object> doAuthCapture(String transactionID, BioMetricsDataDto dto) throws Exception {
+    public JSONArray doAuthCapture(String transactionID, BioMetricsDataDto bioDTO) throws Exception {
 
-        Map<String, String> result = CryptoUtility.encrypt(new JwtUtility().getPublicKeyToEncryptCaptureBioValue(),
-                dto.getBioValue(), transactionID);
-//        CaptureRequestDeviceDetailDto bio = captureRequestDto.getBio().get(0);
-        NewBioAuthDto data = buildAuthNewBioDto(dto,"FACE", 90,
-                transactionID, result);
-        Map<String, Object> biometricData = getAuthMinimalResponse("1.0",
-                data, "", result);
-        return biometricData;
+        List<BioMetricsDataDto> list = new ArrayList<>();
+        list.add(bioDTO);
+        String previousHash = HMACUtils.digestAsPlainText(HMACUtils.generateHash("".getBytes()));
+        List<Map<String, Object>> listOfBiometric = new ArrayList<>();
+
+
+        for (BioMetricsDataDto dto : list) {
+            Map<String, String> result = CryptoUtility.encrypt(new JwtUtility().getPublicKeyToEncryptCaptureBioValue(),
+                    dto.getBioValue(), transactionID);
+
+            NewBioAuthDto data = buildAuthNewBioDto(dto, "FACE", 90,
+                    transactionID, result);
+
+            Map<String, Object> biometricData = getAuthMinimalResponse("1.0",
+                    data, previousHash, result);
+
+            listOfBiometric.add(biometricData);
+            previousHash = (String) biometricData.get(HASH);
+
+        }
+
+
+
+
+        JSONArray jsonData = new JSONArray(listOfBiometric);
+
+
+
+        return jsonData;
     }
 
 
@@ -104,7 +136,7 @@ public class FaceCapture {
 
         digitalId = getDigitalModality(oB.readValue(
                 new String(Files.readAllBytes(
-                        Paths.get(System.getProperty("user.dir") + "/files/MockMDS/DigitalFaceId.txt"))),
+                        Paths.get( "DigitalFaceId.txt"))),
                 Map.class));
         return digitalId;
     }

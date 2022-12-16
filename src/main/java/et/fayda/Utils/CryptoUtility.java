@@ -29,7 +29,7 @@ public class CryptoUtility {
 	
 	private static BouncyCastleProvider provider;
 	private static final String asymmetricAlgorithm = "RSA/ECB/OAEPWITHSHA-256ANDMGF1PADDING";
-	private static final String SYMMETRIC_ALGORITHM = "AES/GCM/NOPadding";
+	private static final String SYMMETRIC_ALGORITHM = "AES/GCM/PKCS5Padding";
 	private static final int GCM_TAG_LENGTH = 128;
 	private static final String RSA_ECB_NO_PADDING = "RSA/ECB/NoPadding";
 	
@@ -95,28 +95,28 @@ public class CryptoUtility {
 		return result;
 	}
 	
-	public static String decrypt(PrivateKey privateKey, String sessionKey, String data, String timestamp,
-								 String transactionId) {
-		try {
-			
-			timestamp = timestamp.trim();
-			byte[] xorResult = getXOR(timestamp, transactionId);
-			byte[] aadBytes = getLastBytes(xorResult, 16);
-			byte[] ivBytes = getLastBytes(xorResult, 12);
-			
-			byte[] decodedSessionKey =  java.util.Base64.getUrlDecoder().decode(sessionKey);		
-			final byte[] symmetricKey = asymmetricDecrypt(privateKey, decodedSessionKey);		
-			SecretKeySpec secretKeySpec = new SecretKeySpec(symmetricKey, "AES");
-			
-			byte[] decodedData =  java.util.Base64.getUrlDecoder().decode(data);
-			final byte[] decryptedData = symmetricDecrypt(secretKeySpec, decodedData, ivBytes, aadBytes);
-			return new String(decryptedData);
-			
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
-		return null;
-	}
+//	public static String decrypt(PrivateKey privateKey, String sessionKey, String data, String timestamp,
+//								 String transactionId) {
+//		try {
+//
+//			timestamp = timestamp.trim();
+//			byte[] xorResult = getXOR(timestamp, transactionId);
+//			byte[] aadBytes = getLastBytes(xorResult, 16);
+//			byte[] ivBytes = getLastBytes(xorResult, 12);
+//
+//			byte[] decodedSessionKey =  java.util.Base64.getUrlDecoder().decode(sessionKey);
+//			final byte[] symmetricKey = asymmetricDecrypt(privateKey, decodedSessionKey);
+//			SecretKeySpec secretKeySpec = new SecretKeySpec(symmetricKey, "AES");
+//
+//			byte[] decodedData =  java.util.Base64.getUrlDecoder().decode(data);
+//			final byte[] decryptedData = symmetricDecrypt(secretKeySpec, decodedData, ivBytes, aadBytes);
+//			return new String(decryptedData);
+//
+//		} catch(Exception ex) {
+//			ex.printStackTrace();
+//		}
+//		return null;
+//	}
 	
 	public static byte[] symmetricDecrypt(SecretKeySpec secretKeySpec, byte[] dataBytes, byte[] ivBytes, byte[] aadBytes) {
 		try {			
@@ -211,31 +211,31 @@ public static SecretKey getSymmetricKey() throws NoSuchAlgorithmException {
 		return doFinal(data, cipher);
 	}
  
-	public static byte[] asymmetricDecrypt(PrivateKey key, byte[] data)  throws Exception {
-	
-		Cipher cipher = Cipher.getInstance(RSA_ECB_NO_PADDING);
-		cipher.init(Cipher.DECRYPT_MODE, key);
-	
-		byte[] paddedPlainText = doFinal(data, cipher);
-		if (paddedPlainText.length < asymmetricKeyLength / 8) {
-			byte[] tempPipe = new byte[asymmetricKeyLength / 8];
-			System.arraycopy(paddedPlainText, 0, tempPipe, tempPipe.length - paddedPlainText.length,
-					paddedPlainText.length);
-			paddedPlainText = tempPipe;
-		}
-		final OAEPParameterSpec oaepParams = new OAEPParameterSpec(HASH_ALGO, MGF1, MGF1ParameterSpec.SHA256,
-				PSpecified.DEFAULT);
-		return unpadOEAPPadding(paddedPlainText, oaepParams);
-	}
+//	public static byte[] asymmetricDecrypt(PrivateKey key, byte[] data)  throws Exception {
+//
+//		Cipher cipher = Cipher.getInstance(RSA_ECB_NO_PADDING);
+//		cipher.init(Cipher.DECRYPT_MODE, key);
+//
+//		byte[] paddedPlainText = doFinal(data, cipher);
+//		if (paddedPlainText.length < asymmetricKeyLength / 8) {
+//			byte[] tempPipe = new byte[asymmetricKeyLength / 8];
+//			System.arraycopy(paddedPlainText, 0, tempPipe, tempPipe.length - paddedPlainText.length,
+//					paddedPlainText.length);
+//			paddedPlainText = tempPipe;
+//		}
+//		final OAEPParameterSpec oaepParams = new OAEPParameterSpec(HASH_ALGO, MGF1, MGF1ParameterSpec.SHA256,
+//				PSpecified.DEFAULT);
+//		return unpadOEAPPadding(paddedPlainText, oaepParams);
+//	}
 
 	
-	private static byte[] unpadOEAPPadding(byte[] paddedPlainText, OAEPParameterSpec paramSpec) throws Exception{
-		byte[] unpaddedData = null;
-		sun.security.rsa.RSAPadding padding = sun.security.rsa.RSAPadding.getInstance(
-				sun.security.rsa.RSAPadding.PAD_OAEP_MGF1, asymmetricKeyLength / 8, new SecureRandom(), paramSpec);
-		unpaddedData = padding.unpad(paddedPlainText);
-		return unpaddedData;
-	}
+//	private static byte[] unpadOEAPPadding(byte[] paddedPlainText, OAEPParameterSpec paramSpec) throws Exception{
+//		byte[] unpaddedData = null;
+//		sun.security.rsa.RSAPadding padding = sun.security.rsa.RSAPadding.getInstance(
+//				sun.security.rsa.RSAPadding.PAD_OAEP_MGF1, asymmetricKeyLength / 8, new SecureRandom(), paramSpec);
+//		unpaddedData = padding.unpad(paddedPlainText);
+//		return unpaddedData;
+//	}
 	
 	private static byte[] doFinal(byte[] data, Cipher cipher) throws Exception {
 		return cipher.doFinal(data);
@@ -288,33 +288,33 @@ public static SecretKey getSymmetricKey() throws NoSuchAlgorithmException {
 		return java.util.Arrays.copyOfRange(xorBytes, xorBytes.length - lastBytesNum, xorBytes.length);
 	}
 
-	public static void main(String[] args) throws Exception {
-		String data = "this is my test";
-		
-		KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
-		gen.initialize(2048);
-		KeyPair pair = gen.generateKeyPair();
-		
-		String timestamp =  getTimestamp();
-		String transactionId = "sdfsdf-sdfsd";
-		byte[] xorResult = getXOR(timestamp, transactionId);
-		byte[] aadBytes = getLastBytes(xorResult, 16);
-		byte[] ivBytes = getLastBytes(xorResult, 12);
-		byte[] dataBytes = data.getBytes();
-	
-		SecretKey secretKey = getSymmetricKey();
-		final byte[] encryptedData = symmetricEncrypt(secretKey, dataBytes, ivBytes, aadBytes);			
-		final byte[] encryptedSymmetricKey =  asymmetricEncrypt(pair.getPublic(), secretKey.getEncoded());
-		
-		String bioValue = java.util.Base64.getUrlEncoder().encodeToString(encryptedData);
-		String sessionKey = java.util.Base64.getUrlEncoder().encodeToString(encryptedSymmetricKey);
-				
-		byte[] decodedSessionKey =  java.util.Base64.getUrlDecoder().decode(sessionKey);		
-		final byte[] symmetricKey = asymmetricDecrypt(pair.getPrivate(), decodedSessionKey);		
-		SecretKeySpec secretKeySpec = new SecretKeySpec(symmetricKey, "AES");
-		
-		byte[] decodedBioValue =  java.util.Base64.getUrlDecoder().decode(bioValue);
-		final byte[] decryptedData = symmetricDecrypt(secretKeySpec, decodedBioValue, ivBytes, aadBytes);
-		System.out.println(new String(decryptedData));
-	}
+//	public static void main(String[] args) throws Exception {
+//		String data = "this is my test";
+//
+//		KeyPairGenerator gen = KeyPairGenerator.getInstance("RSA");
+//		gen.initialize(2048);
+//		KeyPair pair = gen.generateKeyPair();
+//
+//		String timestamp =  getTimestamp();
+//		String transactionId = "sdfsdf-sdfsd";
+//		byte[] xorResult = getXOR(timestamp, transactionId);
+//		byte[] aadBytes = getLastBytes(xorResult, 16);
+//		byte[] ivBytes = getLastBytes(xorResult, 12);
+//		byte[] dataBytes = data.getBytes();
+//
+//		SecretKey secretKey = getSymmetricKey();
+//		final byte[] encryptedData = symmetricEncrypt(secretKey, dataBytes, ivBytes, aadBytes);
+//		final byte[] encryptedSymmetricKey =  asymmetricEncrypt(pair.getPublic(), secretKey.getEncoded());
+//
+//		String bioValue = java.util.Base64.getUrlEncoder().encodeToString(encryptedData);
+//		String sessionKey = java.util.Base64.getUrlEncoder().encodeToString(encryptedSymmetricKey);
+//
+//		byte[] decodedSessionKey =  java.util.Base64.getUrlDecoder().decode(sessionKey);
+//		final byte[] symmetricKey = asymmetricDecrypt(pair.getPrivate(), decodedSessionKey);
+//		SecretKeySpec secretKeySpec = new SecretKeySpec(symmetricKey, "AES");
+//
+//		byte[] decodedBioValue =  java.util.Base64.getUrlDecoder().decode(bioValue);
+//		final byte[] decryptedData = symmetricDecrypt(secretKeySpec, decodedBioValue, ivBytes, aadBytes);
+//		System.out.println(new String(decryptedData));
+//	}
 }
