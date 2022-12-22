@@ -12,6 +12,9 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +33,24 @@ public class Main {
 
         System.out.println(image.length);
 
+        String encryptedData = fc.getEncryptedFaceData(image, "1231231231");
+
+
+
         try {
-            fc.getEncryptedFaceData(image, "1231231231");
-        } catch (JsonProcessingException e) {
+            writeToFile(encryptedData, "encryptedData.txt");
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+
     }
+
+    public static void writeToFile(String data, String fileName) throws IOException {
+        Files.write(Paths.get(fileName), data.getBytes(StandardCharsets.UTF_8));
+    }
+
+
 
     public static byte[] extractBytes (String ImageName) throws IOException {
         // open image

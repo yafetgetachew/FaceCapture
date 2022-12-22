@@ -9,7 +9,6 @@ import et.fayda.DTO.NewBioAuthDto;
 import et.fayda.Utils.CryptoUtility;
 import et.fayda.Utils.JwtUtility;
 import io.mosip.kernel.core.util.HMACUtils;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -24,7 +23,7 @@ public class FaceCapture {
     private static final String HASH = "hash";
     private static ObjectMapper oB = null;
 
-    public String getEncryptedFaceData(byte[] face, String transactionID) throws JsonProcessingException {
+    public String getEncryptedFaceData(byte[] face, String transactionID) {
 
         BioMetricsDataDto bioDto = new BioMetricsDataDto();
 
@@ -37,8 +36,12 @@ public class FaceCapture {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return oB.writeValueAsString(result);
+
+
+        return result.toString();
+
     }
+
 
 
     public JSONArray doAuthCapture(String transactionID, BioMetricsDataDto bioDTO) throws Exception {
@@ -64,12 +67,7 @@ public class FaceCapture {
 
         }
 
-
-
-
         JSONArray jsonData = new JSONArray(listOfBiometric);
-
-
 
         return jsonData;
     }
@@ -133,7 +131,7 @@ public class FaceCapture {
     public String getDigitalId(String moralityType) throws IOException {
 
         String digitalId = null;
-
+        oB = new ObjectMapper();
         digitalId = getDigitalModality(oB.readValue(
                 new String(Files.readAllBytes(
                         Paths.get( "DigitalFaceId.txt"))),

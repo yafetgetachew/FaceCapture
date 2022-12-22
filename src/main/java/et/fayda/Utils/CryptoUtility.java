@@ -4,7 +4,7 @@ import io.mosip.kernel.core.util.DateUtils;
 import io.mosip.kernel.core.util.HMACUtils;
 
 import io.mosip.kernel.crypto.jce.constant.SecurityExceptionCodeConstant;
-import io.mosip.kernel.crypto.jce.core.CryptoCore;
+import et.fayda.Utils.impl.CryptoCore;
 import io.mosip.kernel.crypto.jce.util.CryptoUtils;
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
